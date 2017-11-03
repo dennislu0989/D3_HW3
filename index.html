@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>D3 HW_3</title>
+    <script src="https://d3js.org/d3.v3.min.js"></script>
+
+</head>
+
+<body style="background-color: silver">
+
+    <!--作業一-->
+
+    <h1> Numbers </h1>
+
+    <br>
+    <br>
+
+    <div></div>
+    <div></div>
+
+
+    <script>
+        var arr = [85, 60, 99, 49, 77, 59];
+
+        bind(arr);
+        render();
+
+        function bind(dataSet) {
+            var body = d3.select("body");
+
+            var seclection = body.selectAll("div")
+                .data(dataSet)
+            seclection.enter().append("div");
+            seclection.exit().remove();
+        }
+
+        function render() {
+            d3.selectAll("div")
+                .text(function(d, i) {
+                    //                 d is set to the corresponding value in your original data set 先拿Ｄ再拿i
+                    return (i + 1) + ":" + d;
+                }).style({
+                    "color": function(d) {
+                        //                     回傳匿名函式d
+                        if (d < 70) {
+                            return "red"
+                        } else {
+                            return "blue"
+                        }
+
+                    }
+                })
+
+        }
+
+
+
+
+        //
+        //
+        //        console.log(d3.selectAll("div"))
+    </script>
+    <br>
+    <hr>
+    <br>
+
+
+    <h1> Bar Chart </h1>
+    <div></div>
+    <div></div>
+
+    <input type="button" value="新增" onclick="update()">
+    <input type="button" value="移除" onclick="kickitem()">
+    <script>
+        var arr = [85, 60, 99, 49, 77, 59];
+        var w = 900,
+            h = 300,
+            p = 100;
+
+        svg();
+        bind(arr);
+        render();
+
+        function svg() {
+            d3.select("body").append("svg")
+                .attr({
+                    "id": "barChart",
+                    "width": w,
+                    "height": h
+                })
+        }
+
+        function bind(dataSet) {
+            var svg = d3.select("#barChart");
+            var selection = svg.selectAll("rect")
+                .data(dataSet)
+            selection.enter().append("rect");
+            selection.exit().remove();
+            var selection_t = svg.selectAll("text")
+                .data(dataSet)
+            selection_t.enter().append("text");
+            selection_t.exit().remove();
+        }
+
+        function render() {
+            d3.selectAll("#barChart rect")
+                .attr({
+                    x: function(d, i) {
+                        return p + 43 * i;
+                    },
+                    y: function(d) {
+                        return h - p - d
+                    },
+                    width: 40,
+                    height: function(d) {
+                        return d
+                    },
+                    fill: function(d) {
+                        if (d < 70) {
+                            return "red"
+                        } else {
+                            return "lightgreen"
+                        }
+                    }
+                })
+            d3.selectAll("#barChart text")
+                .attr({
+                    x: function(d, i) {
+                        return p + 43 * i + 20;
+                    },
+                    y: h - p + 20,
+                    "text-anchor": "middle"
+                }).text(function(d) {
+                    return d;
+                })
+        }
+
+        function update() {
+            var num = random(10, 100);
+            arr.push(num);
+            bind(arr);
+            render();
+        }
+
+        function random(N, M) {
+            return Math.floor(Math.random() * (M - N + 1) + N);
+
+        }
+
+        function kickitem() {
+            arr.shift();
+            bind(arr);
+            render();
+        }
+
+        function random(N, M) {
+            return Math.floor(Math.random() * (M - N + 1) + N);
+
+        }
+        console.log(d3.selectAll("div"))
+    </script>
+
+<br>
+<hr>
+<br>
+<h1> Political Party Color </h1>
+
+
+
+
+
+   <div>
+<!--   <input type="button" value="政黨" onclick="update2()">-->
+   
+   
+    <p id="Color" style="color: gray;"> COLOR </p>
+    <select onchange="showPartyColor(this.value)">
+        <option value="1">中國國民黨</option>
+        <option value="2">民主進步黨</option>
+        <option value="3">時代力量</option>
+        <option value="4">無黨團結聯聯盟</option>
+        <option value="5">親民黨</option>
+        <option value="6">共和黨</option>
+        <option value="6">民主黨</option>
+    </select>
+</div>
+
+<script>
+//    var arr2 = ["中國國民黨", "民主進步黨", "時代力量", "無黨團結聯盟", "親民黨"];
+//
+//
+//    var index = ["中國國民黨", "民主進步黨", "時代力量", "無黨團結聯盟", "親民黨"];
+//    var color = ["blue", "green", "yellow", "grey", "orange"];
+//    var xScale = d3.scale.ordinal10()
+//        .domain(index);
+//    .range(color);
+    
+     var index = [1,2,3,4,5,6];
+        var color = ["blue", "green", "yellow", "gray", "orange","red"];
+        var xScale = d3.scale.ordinal()
+            .domain(index)
+            .range(color);
+
+    console.log(xScale("中國國民黨"));
+    console.log(xScale("民主進步黨"));
+    console.log(xScale("時代力量"));
+    console.log(xScale("無黨團結聯盟"));
+    console.log(xScale("親民黨"));
+     function showPartyColor(value){d3.select ("#Color").style({color: xScale(value)});
+    }
+</script>
+
+</body>
+
+</html>
